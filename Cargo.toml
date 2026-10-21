@@ -5,7 +5,7 @@ edition = "2024"
 
 [[bin]]
 name = "amane-shell"
-path = '/home/vadim/.config/amane/src/main.rs'
+path = '/home/vadim/.dotfiles/config/amane/src/main.rs'
 
 [dependencies]
 amane = { path = '/home/vadim/.cache/amane/library' }

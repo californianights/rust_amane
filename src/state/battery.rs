@@ -7,25 +7,27 @@ pub struct BatteryService {
     pub percent: u8,
 }
 
+pub(crate) fn battery_glyph(percent: u8) -> &'static str {
+    match percent {
+        0..=9 => "󰁺",
+        10..=19 => "󰁻",
+        20..=29 => "󰁼",
+        30..=39 => "󰁽",
+        40..=49 => "󰁾",
+        50..=59 => "󰁿",
+        60..=69 => "󰂀",
+        70..=79 => "󰂁",
+        80..=89 => "󰂂",
+        _ => "󰁹",
+    }
+}
+
 impl BatteryService {
     fn read_battery() -> (Label, u8) {
         let battery = Battery::read();
         let percent = battery.percent();
 
-        let glyph = match percent {
-            0..=9 => "󰁺",
-            10..=19 => "󰁻",
-            20..=29 => "󰁼",
-            30..=39 => "󰁽",
-            40..=49 => "󰁾",
-            50..=59 => "󰁿",
-            60..=69 => "󰂀",
-            70..=79 => "󰂁",
-            80..=89 => "󰂂",
-            _ => "󰁹",
-        };
-
-        let text = format!("{} {}%", glyph, percent);
+        let text = format!("{} {}%", battery_glyph(percent), percent);
         let width = if percent == 100 {
             80.0
         } else if percent < 10 {

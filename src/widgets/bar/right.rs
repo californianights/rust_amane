@@ -21,10 +21,7 @@ pub fn view(labels: &[&Label]) -> Rectangle {
             Rectangle::new()
                 .width(label.width)
                 .height(Parent)
-                .fill(Gradient::linear(
-                    135.0,
-                    [(0.0, "#0d1422"), (1.0, "#05080f")],
-                ))
+                .fill("#A5BFE833")
                 .radius(Full)
                 .align_child(Center, Center)
                 .child(

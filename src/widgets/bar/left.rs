@@ -1,71 +1,45 @@
-use amane::{
-    Center, Color, Full, Gradient, Padding, Parent, Rectangle, Row, Start, Text, Widget, Workspace,
-    Workspaces,
-};
+use amane::{Center, Color, Full, Padding, Parent, Rectangle, Row, Text, Widget};
 
-pub fn view(workspaces: Vec<Workspace>) -> Rectangle {
-    let button_w = 34.0;
-    let gap = 4.0;
+use crate::widgets::bar::label::Label;
+
+pub fn view(labels: &[&Label]) -> Rectangle {
+    let gap = 8.0;
     let padding_x = 8.0;
-    let count = workspaces.len() as f32;
-
-    let width = if count == 0.0 {
-        2.0 * padding_x
-    } else {
-        (count * button_w) + ((count - 1.0) * gap) + (2.0 * padding_x)
-    };
 
     let mut children: Vec<Box<dyn Widget>> = Vec::new();
+    let mut total_width = 2.0 * padding_x;
 
-    for (i, ws) in workspaces.iter().enumerate() {
+    for (i, label) in labels.iter().enumerate() {
         if i > 0 {
+            total_width += gap;
             children.push(Box::new(Rectangle::new().width(gap).height(Parent)));
         }
-        children.push(Box::new(workspace_button(ws)));
+
+        total_width += label.width;
+
+        children.push(Box::new(
+            Rectangle::new()
+                .width(label.width)
+                .height(Parent)
+                .fill("#A5BFE833")
+                .radius(Full)
+                .align_child(Center, Center)
+                .child(
+                    Text::new(&label.text)
+                        .color(Color::WHITE)
+                        .size(15.0)
+                        .weight(600),
+                ),
+        ));
     }
 
     Rectangle::new()
-        .width(width)
+        .width(total_width)
         .height(Parent)
-        .fill(Gradient::linear(
-            135.0,
-            [(0.0, "#0d1422"), (1.0, "#05080f")],
-        ))
-        .radius(Full)
         .padding(Padding {
-            top: 2.0,
-            right: padding_x,
-            bottom: 2.0,
             left: padding_x,
+            right: padding_x,
+            ..Padding::default()
         })
-        .align_child(Start, Center)
         .child(Row::new(children))
-}
-
-fn workspace_button(workspace: &Workspace) -> Rectangle {
-    let id = workspace.id();
-    let label = workspace.index().to_string();
-
-    let button = Rectangle::new()
-        .width(34.0)
-        .height(28.0)
-        .radius(Full)
-        .align_child(Center, Center)
-        .on_click(move |_| Workspaces::focus(id));
-
-    if workspace.focused() {
-        button
-            .fill(Gradient::linear(
-                135.0,
-                [(0.0, "#c0caf5"), (1.0, "#334050")],
-            ))
-            .child(
-                Text::new(label)
-                    .color(Color::from("#040509"))
-                    .size(15.0)
-                    .weight(600),
-            )
-    } else {
-        button.child(Text::new(label).color(Color::WHITE).size(15.0).weight(600))
-    }
 }
