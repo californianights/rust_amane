@@ -1,6 +1,8 @@
 # rust-amane
 
-A small desktop panel and application launcher written in Rust. This project uses **Amane**, a framework that I have modified slightly; it is not an unmodified upstream version.
+A small desktop panel and application launcher written in Rust.
+
+> **Note:** This project uses my slightly modified version of the **Amane** framework. Its API differs somewhat from upstream Amane, so upstream examples or documentation may not match this code exactly.
 
 ## What it does
 
